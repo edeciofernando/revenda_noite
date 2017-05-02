@@ -12,6 +12,7 @@ class CarrosTableSeeder extends Seeder {
     public function run() {
         DB::table('carros')->insert([
             'modelo' => 'Sandero',
+            'marca_id' => 4,
             'cor' => 'Azul',
             'ano' => '2014',
             'combustivel' => 'F',
@@ -22,6 +23,7 @@ class CarrosTableSeeder extends Seeder {
         
         DB::table('carros')->insert([
             'modelo' => 'Pálio',
+            'marca_id' => 1,
             'cor' => 'Vermelho',
             'ano' => '2012',
             'combustivel' => 'G',
@@ -32,6 +34,7 @@ class CarrosTableSeeder extends Seeder {
         
         DB::table('carros')->insert([
             'modelo' => 'Fiesta',
+            'marca_id' => 5,
             'cor' => 'Branco',
             'ano' => '2015',
             'combustivel' => 'A',            

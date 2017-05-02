@@ -18,6 +18,16 @@
 
 <div class='col-sm-12'>
 
+@if (count($errors) > 0)
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif        
+    
 @if ($acao == 1)
     <form method="post" action="{{route('carros.store')}}">
 @else
@@ -34,6 +44,18 @@
                    required>
         </div>
 
+        <div class="form-group">
+            <label for="marca_id">Marca:</label>
+            <select class="form-control" id="marca_id" name="marca_id">
+            @foreach($marcas as $m)    
+            <option value="{{$m->id}}"
+@if ((isset($reg) and $reg->marca_id == $m->id) or 
+     old('marca_id') == $m->id) selected @endif>
+                       {{$m->nome}}</option>
+            @endforeach    
+            </select>
+        </div>
+                
         <div class="form-group">
             <label for="cor">Cor:</label>
             <input type="text" class="form-control" id="cor"
