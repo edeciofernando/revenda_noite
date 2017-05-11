@@ -55,8 +55,10 @@
              {{csrf_field()}}
              <button type="submit"
                      class="btn btn-danger"> Excluir </button>
-       </form>
-        
+       </form> &nbsp;&nbsp;
+       <a href="{{route('carros.foto', $carro->id)}}" 
+          class="btn btn-info" 
+          role="button">Foto</a>        
     </td>
 </tr>
 @endforeach        

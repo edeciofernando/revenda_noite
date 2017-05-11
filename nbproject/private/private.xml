@@ -2,18 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/revenda_noite/database/migrations/2017_04_27_222156_create_marcas_table.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/config/app.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/app/Carro.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/database/migrations/2017_04_27_222506_add_marca_to_carros_table.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/resources/views/carros_list.blade.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/app/Http/Controllers/CarroController.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/database/seeds/MarcasTableSeeder.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/database/seeds/DatabaseSeeder.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/resources/views/carros_form.blade.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/database/seeds/CarrosTableSeeder.php</file>
-            <file>file:/C:/xampp/htdocs/revenda_noite/resources/lang/pt-br/validation.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
