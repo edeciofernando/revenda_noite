@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Carro;
 use App\Marca;
 
@@ -14,8 +15,12 @@ class CarroController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $carros = Carro::all();
-
+        // verifica se (não) está autenticado
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+//        $carros = Carro::all();
+        $carros = Carro::paginate(3);
         return view('carros_list', compact('carros'));
     }
 
@@ -25,6 +30,10 @@ class CarroController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+        // verifica se (não) está autenticado
+        if (!Auth::check()) {
+            return redirect('/');
+        }
         // 1: indica inclusão
         $acao = 1;
 
@@ -75,6 +84,10 @@ class CarroController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
+        // verifica se (não) está autenticado
+        if (!Auth::check()) {
+            return redirect('/');
+        }
         // posiciona no registro a ser alterado e obtém seus dados
         $reg = Carro::find($id);
 
@@ -95,7 +108,7 @@ class CarroController extends Controller {
     public function update(Request $request, $id) {
 
         $this->validate($request, [
-            'modelo' => ['required', 'unique:carros,modelo,'.$id, 'min:2', 'max:60'],
+            'modelo' => ['required', 'unique:carros,modelo,' . $id, 'min:2', 'max:60'],
             'ano' => 'required|numeric|min:1970|max:2020',
             'cor' => 'min:4|max:40'
         ]);
@@ -130,6 +143,11 @@ class CarroController extends Controller {
     }
 
     public function foto($id) {
+        // verifica se (não) está autenticado
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+
         // posiciona no registro a ser alterado e obtém seus dados
         $reg = Carro::find($id);
 
@@ -137,12 +155,12 @@ class CarroController extends Controller {
 
         return view('carros_foto', compact('reg', 'marcas'));
     }
-    
+
     public function storeFoto(Request $request) {
         // obtém os dados do form
         $dados = $request->all();
-                
-        if(isset($dados['foto'])) {
+
+        if (isset($dados['foto'])) {
             // obtém o id para identificar a foto
             $id = $dados['id'];
             $fotoId = $id . '.jpg';
@@ -150,6 +168,50 @@ class CarroController extends Controller {
         }
 
         return redirect()->route('carros.index')
-               ->with('status', $request->modelo . ' com Foto Cadastrada!');
-    }    
+                        ->with('status', $request->modelo . ' com Foto Cadastrada!');
+    }
+
+    public function pesq() {
+        // verifica se (não) está autenticado
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+//        $carros = Carro::all();
+        $carros = Carro::paginate(3);
+        return view('carros_pesq', compact('carros'));
+    }
+
+    public function filtros(Request $request) {
+        $modelo = $request->modelo;
+        $precomax = $request->precomax;
+
+        $filtro = array();
+        
+        if (!empty($modelo)) {
+            array_push($filtro, array('modelo','like', '%'.$modelo.'%'));
+        }
+        
+        if (!empty($precomax)) {
+            array_push($filtro, array('preco','<=', $precomax));
+        }
+
+        $carros = Carro::where($filtro)
+                    ->orderBy('modelo')  
+                    ->paginate(3);
+        
+        return view('carros_pesq', compact('carros'));        
+    }
+    
+    public function filtros2(Request $request) {
+        $modelo = $request->modelo;
+        $precomax = $request->precomax;
+        
+        $carros = Carro::where('modelo', 'like', '%'.$modelo.'%')
+                    ->where('preco', '<=', $precomax)
+                    ->orderBy('modelo')  
+                    ->paginate(3);
+        
+        return view('carros_pesq', compact('carros'));        
+    }
+    
 }

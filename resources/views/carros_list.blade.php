@@ -64,6 +64,7 @@
 @endforeach        
     </tbody>
   </table>    
+{{ $carros->links() }}
 </div>
 
 @endsection
