@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Carro;
 use App\Marca;
+use Mail;
+use App\Mail\AvisoPromocao;
 
 class CarroController extends Controller {
 
@@ -186,32 +189,48 @@ class CarroController extends Controller {
         $precomax = $request->precomax;
 
         $filtro = array();
-        
+
         if (!empty($modelo)) {
-            array_push($filtro, array('modelo','like', '%'.$modelo.'%'));
+            array_push($filtro, array('modelo', 'like', '%' . $modelo . '%'));
         }
-        
+
         if (!empty($precomax)) {
-            array_push($filtro, array('preco','<=', $precomax));
+            array_push($filtro, array('preco', '<=', $precomax));
         }
 
         $carros = Carro::where($filtro)
-                    ->orderBy('modelo')  
-                    ->paginate(3);
-        
-        return view('carros_pesq', compact('carros'));        
+                ->orderBy('modelo')
+                ->paginate(3);
+
+        return view('carros_pesq', compact('carros'));
     }
-    
+
     public function filtros2(Request $request) {
         $modelo = $request->modelo;
         $precomax = $request->precomax;
-        
-        $carros = Carro::where('modelo', 'like', '%'.$modelo.'%')
-                    ->where('preco', '<=', $precomax)
-                    ->orderBy('modelo')  
-                    ->paginate(3);
-        
-        return view('carros_pesq', compact('carros'));        
+
+        $carros = Carro::where('modelo', 'like', '%' . $modelo . '%')
+                ->where('preco', '<=', $precomax)
+                ->orderBy('modelo')
+                ->paginate(3);
+
+        return view('carros_pesq', compact('carros'));
+    }
+
+    public function graf() {
+        $carros = DB::table('carros')
+                ->join('marcas', 'carros.marca_id', '=', 'marcas.id')
+                ->select('marcas.nome as marca', DB::raw('count(*) as num'))
+                ->groupBy('marcas.nome')
+                ->get();
+
+        return view("carros_graf", compact("carros"));
+    }
+
+    public function enviaMail() {
+        $destinatario = "edeciofernando@gmail.com";
+        Mail::to($destinatario)->subject("Promoção de Aniversário")
+                ->send(new AvisoPromocao());
     }
     
 }

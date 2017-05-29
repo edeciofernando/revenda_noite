@@ -24,6 +24,8 @@ Route::get('carrospesq', 'CarroController@pesq')
         ->name('carros.pesq');
 Route::post('carrosfiltros', 'CarroController@filtros')
         ->name('carros.filtros');
+Route::get('carrosgraf', 'CarroController@graf')
+        ->name('carros.graf');
 
 Auth::routes();
 
