@@ -56,15 +56,10 @@
                         </form>
                     </li>
                 </ul>      
-
             </div>
         </nav>
-
         <div class="container">
-
             @yield('conteudo')
-
         </div>
-
     </body>
 </html>

@@ -34,3 +34,12 @@ Route::get('/', 'HomeController@index');
 Route::get('register', function() {
     return "<h1> Acesso Restrito </h1>";  
 });
+
+Route::resource('clientes', 'ClienteController');
+
+// Rotas dos WebServices
+Route::get('carrows/{id?}', 'CarroController@ws');
+
+Route::get('carroxml/{id?}', 'CarroController@xml');
+
+Route::get('carrolista/{id?}/{id2?}', 'CarroController@listaxml');

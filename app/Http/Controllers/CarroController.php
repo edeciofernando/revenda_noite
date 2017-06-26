@@ -232,5 +232,133 @@ class CarroController extends Controller {
         Mail::to($destinatario)->subject("Promoção de Aniversário")
                 ->send(new AvisoPromocao());
     }
-    
+
+    // devolve dados em JSON do id passado como parâmetro
+    public function ws($id = null) {
+        // indica o tipo de retorno do método
+        header("Content-type: application/json; charset=utf-8");
+
+        // caso o id não tenha sido informado
+        if ($id == null) {
+            $retorno = array(
+                "status" => "url incorreta",
+                "modelo" => null,
+                "marca" => null,
+                "ano" => null,
+                "preco" => null);
+        } else {
+            // pesquisa pelo id informado
+            $reg = Carro::find($id);
+
+            // se encontrou registro
+            if (isset($reg)) {
+                $retorno = array(
+                    "status" => "encontrado",
+                    "modelo" => $reg->modelo,
+                    "marca" => $reg->marca->nome,
+                    "ano" => $reg->ano,
+                    "preco" => $reg->preco);
+            } else {
+                $retorno = array(
+                    "status" => "Carro Inexistente",
+                    "modelo" => null,
+                    "marca" => null,
+                    "ano" => null,
+                    "preco" => null);
+            }
+        }
+        // converte array para o formato JSON
+        echo json_encode($retorno, JSON_PRETTY_PRINT);
+    }
+
+    // exemplo devolvendo XML
+    public function xml($id = null) {
+        // indica o tipo de retorno da função
+        header("Content-type: application/xml");
+
+        // inicializa a biblioteca SimpleXML
+        $xml = new \SimpleXMLElement(''
+                . '<?xml version="1.0" encoding="utf-8"?>'
+                . '<carros></carros>');
+
+        // se id não foi passado
+        if ($id == null) {
+            $item = $xml->addChild("carro");
+            $item->addChild("status", "url incorreta");
+            $item->addChild("modelo", null);
+            $item->addChild("marca", null);
+            $item->addChild("ano", null);
+            $item->addChild("preco", null);
+        } else {
+            // pesquisa o id
+            $reg = Carro::find($id);
+
+            // se encontrou
+            if (isset($reg)) {
+                $item = $xml->addChild("carro");
+                $item->addChild("status", "encontrado");
+                $item->addChild("modelo", $reg->modelo);
+                $item->addChild("marca", $reg->marca->nome);
+                $item->addChild("ano", $reg->ano);
+                $item->addChild("preco", $reg->preco);
+            } else {
+                $item = $xml->addChild("carro");
+                $item->addChild("status", "Carro Inexistente");
+                $item->addChild("modelo", null);
+                $item->addChild("marca", null);
+                $item->addChild("ano", null);
+                $item->addChild("preco", null);
+            }
+        }
+        // exibe a variável no formato XML
+        echo $xml->asXML();
+    }
+
+    // exemplo devolvendo XML
+    public function listaXML($id = null, $id2 = null) {
+        // indica o tipo de retorno da função
+        header("Content-type: application/xml");
+
+        // inicializa a biblioteca SimpleXML
+        $xml = new \SimpleXMLElement(''
+                . '<?xml version="1.0" encoding="utf-8"?>'
+                . '<carros></carros>');
+
+        // se id não foi passado
+        if ($id == null || $id2 == null) {
+            $item = $xml->addChild("carro");
+            $item->addChild("status", "url incorreta");
+            $item->addChild("modelo", null);
+            $item->addChild("marca", null);
+            $item->addChild("ano", null);
+            $item->addChild("preco", null);
+        } else {
+            // pesquisa o id
+            $reg = Carro::where('id', '>=', $id)
+                    ->where('id', '<=', $id2)
+                    ->get();
+
+            // se nº registros > 0
+            if (count($reg) > 0) {
+                foreach ($reg as $c) {
+                    $item = $xml->addChild("carro");
+                    $item->addChild("status", "encontrado");
+                    $item->addChild("modelo", $c->modelo);
+                    $item->addChild("marca", $c->marca->nome);
+                    $item->addChild("ano", $c->ano);
+                    $item->addChild("preco", $c->preco);
+                }
+            } else {
+                $item = $xml->addChild("carro");
+                $item->addChild("status", "Carro Inexistente");
+                $item->addChild("modelo", null);
+                $item->addChild("marca", null);
+                $item->addChild("ano", null);
+                $item->addChild("preco", null);
+            }
+        }
+        // exibe a variável no formato XML
+        echo $xml->asXML();
+    }
+
 }
